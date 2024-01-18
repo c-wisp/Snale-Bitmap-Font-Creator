@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=3 uid="uid://crvnsohwkev8f"]
+
+[ext_resource type="Script" path="res://Scenes/UI/KerningPair.gd" id="1_5atct"]
+
+[node name="KerningPair" type="VBoxContainer"]
+script = ExtResource("1_5atct")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = " Pair -- "
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer"]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+placeholder_text = "Empty"
+alignment = 1
+max_length = 10
+caret_blink = true
+
+[node name="DeleteButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = " Delete "
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer2"]
+layout_mode = 2
+text = "Offset -- "
+
+[node name="SpinBox" type="SpinBox" parent="HBoxContainer2"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+min_value = -256.0
+max_value = 256.0
+alignment = 3
+prefix = " x"
+suffix = "px "
+
+[connection signal="text_changed" from="HBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="button_up" from="HBoxContainer/DeleteButton" to="." method="_on_delete_button_button_up"]
+[connection signal="value_changed" from="HBoxContainer2/SpinBox" to="." method="_on_spin_box_value_changed"]

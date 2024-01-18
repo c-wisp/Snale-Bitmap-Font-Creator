@@ -17,8 +17,8 @@ func _ready():
 	%"MarginY".connect("changed",callable)
 	Char_Arrangement.connect("text_changed",callable)
 
-func change_detected():
-	if Char_Arrangement.text.length() > 0 && owner.current_tex_path != "":
+func change_detected(new_text):
+	if new_text.length() > 0 && owner.current_tex_path != "":
 		if time_left > 0:
 			stop()
 		start()

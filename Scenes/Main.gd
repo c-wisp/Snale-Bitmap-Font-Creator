@@ -13,12 +13,13 @@ extends Node2D
 @onready var Margin_X = %"MarginX"
 @onready var Margin_Y = %"MarginY"
 @onready var Char_Arrangement = %"CharArrangement"
-@onready var Ind_Char_Adj = %"IndCharAdj"
+@onready var Special_Chars = %"SPC Box"
+@onready var Kerning_Pairs = %"KP Box"
 
 @export var char_offset := Vector2.ZERO #how many px the char is shifted by
 var current_tex_path := ""
 var char_cache := [] #used for sprites w/ non-grid textures (specifically on .fnt load)
-var kerning_cache := []
+#var kerning_cache := []
 
 #region classes
 #NOTICE see https://www.angelcode.com/products/bmfont/doc/file_format.html for deets on what does what
@@ -108,24 +109,24 @@ func new_font(): #creates a font file using the data given
 		current_font.page[0].marginX = Margin_X.value
 		current_font.page[0].marginY = Margin_Y.value
 	
-	var individual_char_adj := {}
-	for c in Ind_Char_Adj.get_children():
-		if c.get_index() == 0:
+	var sp_char_adj := {}
+	for c in Special_Chars.get_children():
+		if c.get_index() <= 1:
 			continue
-		individual_char_adj[c.symbol] = c
+		sp_char_adj[c.symbol] = c
 	
 	if char_cache.size() > 0:
 		current_font.chars = char_cache.duplicate()
-		if individual_char_adj.size() > 0:
+		if sp_char_adj.size() > 0:
 			for c in char_cache:
-				if individual_char_adj.size() == 0:
+				if sp_char_adj.size() == 0:
 					break
-				if individual_char_adj.has(String.chr(c.id)):
-					var index = individual_char_adj[String.chr(c.id)]
+				if sp_char_adj.has(String.chr(c.id)):
+					var index = sp_char_adj[String.chr(c.id)]
 					current_font.chars[c].width = index.char_size.x if index.char_size.x != 0 else current_font.chars[c].width
 					current_font.chars[c].height = index.char_size.y if index.char_size.y != 0 else current_font.chars[c].height
 					current_font.chars[c].xadvance = index.advance if index.advance != 0 else current_font.chars[c].width+2
-					individual_char_adj.erase(String.chr(c.id))
+					sp_char_adj.erase(String.chr(c.id))
 	else:
 		var char_rows := []
 		for l in Char_Arrangement.get_line_count():
@@ -153,8 +154,8 @@ func new_font(): #creates a font file using the data given
 					letter.id = char_rows[c].unicode_at(int(r))
 					letter.xoffset = char_offset.x
 					letter.yoffset = char_offset.y
-					if individual_char_adj.keys().has(char_rows[c][r]):
-						var index = individual_char_adj[char_rows[c][r]]
+					if sp_char_adj.keys().has(char_rows[c][r]):
+						var index = sp_char_adj[char_rows[c][r]]
 						letter.width = index.char_size.x if index.char_size.x != 0 else char_size.x
 						letter.height = index.char_size.y if index.char_size.y != 0 else char_size.y
 						letter.xadvance = index.advance if index.advance != 0 else char_size.x+2
@@ -168,24 +169,45 @@ func new_font(): #creates a font file using the data given
 					letter.y = letter_pos.y
 					
 					current_font.chars.append(letter)
-	current_font.kernings_count = kerning_cache.size() if kerning_cache.size() > 0 else -1
-	current_font.kerning = kerning_cache.duplicate()
 	
+	#current_font.kernings_count = kerning_cache.size() if kerning_cache.size() > 0 else -1
+	#current_font.kerning = kerning_cache.duplicate()
+	
+	for k in Kerning_Pairs.get_children():
+		if k.get_index() <= 1 || k.pair.length() < 2 || k.offset == 0:
+			continue
+		if k.pair.begins_with("*"):
+			var second = k.pair.unicode_at(k.pair.length()-1)
+			for c in current_font.chars:
+				var pair = font_kerning.new()
+				pair.first = c.id
+				pair.second = second
+				pair.amount = k.offset
+				current_font.kerning.append(pair)
+		else:
+			var pair = font_kerning.new()
+			pair.first = "*".unicode_at(0) if k.pair.begins_with('"*"') else k.pair.unicode_at(0)
+			pair.second = k.pair.unicode_at(k.pair.length()-1)
+			pair.amount = k.offset
+			current_font.kerning.append(pair)
+	
+	current_font.kernings_count = current_font.kerning.size()
 	current_font.chars_count = current_font.chars.size()
 	return current_font
 
 func load_font(path : String): #loads .fnt files so they can be edited after export
 	var file = FileAccess.open(path,FileAccess.READ)
+	var Individual_Char_Adj = $"CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj"
 	
 	var chardata := []
 	var tex_is_grid := false
 	char_cache.clear()
-	kerning_cache.clear()
+	#kerning_cache.clear()
 	while file.get_position() < file.get_length():
 		var data = file.get_line()
 		match data.left(data.find(" ")):
 			"info":
-				Font_Name.set_line(0,data.left(data.find(" size")).trim_prefix("info face=").replace('"',""))
+				Font_Name.text = data.left(data.find(" size")).trim_prefix("info face=").replace('"',"")
 			"common":
 				var data_array = data.split(" ",false)
 				Font_Size.value = data_array[2].to_int()
@@ -232,13 +254,12 @@ func load_font(path : String): #loads .fnt files so they can be edited after exp
 					Char_Arrangement.text[chardata.size()] = String.chr(new_char.id)
 				chardata.append(new_char)
 			"kerning":
-				var new_pair = font_kerning.new()
 				var data_array = data.split(" ",false)
-				new_pair.first = data_array[1]
-				new_pair.second = data_array[2]
-				new_pair.amount = data_array[3]
-				
-				kerning_cache.append(new_pair)
+				var new_pair = Individual_Char_Adj.KerningPair_Base.instantiate()
+				Kerning_Pairs.add_child(new_pair)
+				new_pair.pair = String.chr(data_array[1].to_int())+String.chr(data_array[2].to_int())
+				new_pair.offset = data_array[3].to_int()
+				new_pair.update_text()
 	
 	#fix the char_arrangement to fit the row/column ct
 	#shouldnt really do anything (aside from visuals) if the texture isnt a grid
@@ -275,12 +296,7 @@ func _on_open_dialog_confirmed():
 		load_font(Open_Dialog.current_path)
 		return
 	current_tex_path = Open_Dialog.current_file
-	Tex_Display.texture = load(current_tex_path)
+	Tex_Display.texture = load(Open_Dialog.current_path)
 	Tex_Display.visible = true
 	Loaded_Texture_Label.text = "Loaded: "+current_tex_path
 	%"ExportButton".disabled = false #prevent exports w/o an image loaded
-
-func _on_add_ica_button_button_up(): #doesnt really have a good spot to go in
-	var new_child = preload("res://Scenes/UI/SPCharData.tscn").instantiate()
-	Ind_Char_Adj.add_child(new_child)
-	Ind_Char_Adj.move_child(new_child,1)

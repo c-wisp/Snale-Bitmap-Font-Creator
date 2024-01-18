@@ -5,10 +5,8 @@ var symbol := ""
 var char_size := Vector2.ZERO
 var advance := 0
 
-@onready var Text = $"Main/TextEdit"
-
-func _on_text_edit_text_changed():
-	symbol = Text.text
+func _on_line_edit_text_changed(new_text):
+	symbol = new_text
 
 func _on_size_x_value_changed(value):
 	char_size.x = value

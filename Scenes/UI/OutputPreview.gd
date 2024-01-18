@@ -1,6 +1,14 @@
 extends TextEdit
+#uses the autosave script to load in-progress fonts+display them in-editor
 
+#reminder to change this to the actual font that will be used everywhere
+#@onready var BASE_FONT = preload("res://Ref/base font ref.fnt")
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+func _on_open_dialog_confirmed():
+#	add_theme_font_override("font",BASE_FONT)
+	remove_theme_font_override("font")
+
+func _on_autosave_timer_autosaved_font(path):
+	var font = FontFile.new()
+	font.load_bitmap_font(path+".fnt")
+	add_theme_font_override("font",font)

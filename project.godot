@@ -34,11 +34,12 @@ version_control/autoload_on_startup=true
 [file_customization]
 
 folder_colors={
-"res://Ref/": "red",
-"res://Scenes/": "purple",
-"res://Scenes/UI/": "green",
-"res://Sprites/": "teal",
-"res://Test Font/": "pink"
+"res://Ref/": "orange",
+"res://Ref/Test Font/": "yellow",
+"res://Scenes/": "green",
+"res://Scenes/UI/": "blue",
+"res://Sprites/": "purple",
+"res://addons/": "red"
 }
 
 [filesystem]

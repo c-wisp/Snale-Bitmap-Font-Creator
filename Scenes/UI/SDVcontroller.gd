@@ -13,7 +13,7 @@ func _on_columns_value_changed(value):
 	material.set_shader_parameter("columns",value)
 
 func _on_open_dialog_confirmed():
-	await get_tree().process_frame
+	await get_tree().physics_frame
 	material.set_shader_parameter("sprite_size",get_parent().texture.get_size())
 
 func _on_margin_y_value_changed(value):

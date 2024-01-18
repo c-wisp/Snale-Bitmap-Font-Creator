@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cy80qqtuujold"]
+[gd_scene load_steps=14 format=3 uid="uid://cy80qqtuujold"]
 
 [ext_resource type="Script" path="res://Scenes/Main.gd" id="1_1unx3"]
 [ext_resource type="Script" path="res://Scenes/Font Exporter.gd" id="2_os87d"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://Scenes/UI/SDVcontroller.gd" id="6_rtvr5"]
 [ext_resource type="Script" path="res://Scenes/UI/FontNameChecker.gd" id="9_2cha7"]
 [ext_resource type="Script" path="res://Scenes/UI/OutputPreview.gd" id="11_m7bvf"]
+[ext_resource type="Script" path="res://Scenes/UI/IndividualCharAdj.gd" id="12_qu3sp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ntki1"]
 shader = ExtResource("5_lrs0x")
@@ -197,12 +198,14 @@ layout_mode = 2
 text = "Font Face"
 horizontal_alignment = 1
 
-[node name="FontName" type="TextEdit" parent="CanvasLayer/UI/Left Toolbar/VBoxContainer/Info"]
+[node name="FontName" type="LineEdit" parent="CanvasLayer/UI/Left Toolbar/VBoxContainer/Info"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(112, 34)
 layout_mode = 2
 placeholder_text = "Untitled Font"
+alignment = 1
 context_menu_enabled = false
+caret_blink = true
 script = ExtResource("9_2cha7")
 
 [node name="Empty Space" type="Control" parent="CanvasLayer/UI/Left Toolbar/VBoxContainer/Info"]
@@ -411,23 +414,50 @@ layout_mode = 2
 text = "Adjust Invidivual Chars"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer"]
+[node name="IndividualCharAdj" type="TabContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer"]
 custom_minimum_size = Vector2(0, 382)
 layout_mode = 2
-horizontal_scroll_mode = 0
+tab_alignment = 1
+script = ExtResource("12_qu3sp")
 
-[node name="IndCharAdj" type="VBoxContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/ScrollContainer"]
+[node name="SP Chars" type="ScrollContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj"]
+layout_mode = 2
+
+[node name="SPC Box" type="VBoxContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/ScrollContainer/IndCharAdj"]
-custom_minimum_size = Vector2(232, 0)
+[node name="Empty Space" type="Control" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars/SPC Box"]
 layout_mode = 2
 
-[node name="AddICA Button" type="Button" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/ScrollContainer/IndCharAdj/CenterContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars/SPC Box"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+
+[node name="AddAdj Button" type="Button" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars/SPC Box/CenterContainer"]
 layout_mode = 2
 text = "   Add SP Char Data   "
+
+[node name="Kerning Pairs" type="ScrollContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj"]
+visible = false
+layout_mode = 2
+
+[node name="KP Box" type="VBoxContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Empty Space" type="Control" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs/KP Box"]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs/KP Box"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+
+[node name="AddPair Button" type="Button" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs/KP Box/CenterContainer"]
+layout_mode = 2
+text = "   Add Kerning Pair   "
 
 [node name="Ribbon" type="ColorRect" parent="CanvasLayer/UI"]
 custom_minimum_size = Vector2(0, 32)
@@ -539,9 +569,11 @@ grow_horizontal = 2
 grow_vertical = 0
 step = 1.0
 
+[connection signal="autosaved_font" from="AutosaveTimer" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/Output Preview" method="_on_autosave_timer_autosaved_font"]
 [connection signal="timeout" from="AutosaveTimer" to="AutosaveTimer" method="_on_timeout"]
 [connection signal="confirmed" from="OpenDialog" to="." method="_on_open_dialog_confirmed"]
 [connection signal="confirmed" from="OpenDialog" to="CenterContainer/TextureRect/TexSplit" method="_on_open_dialog_confirmed"]
+[connection signal="confirmed" from="OpenDialog" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/Output Preview" method="_on_open_dialog_confirmed"]
 [connection signal="confirmed" from="ExportDialog" to="Font Exporter" method="_on_export_dialog_confirmed"]
 [connection signal="close_requested" from="PreferencesWindow" to="PreferencesWindow" method="_on_close_requested"]
 [connection signal="button_up" from="PreferencesWindow/OKButton" to="PreferencesWindow" method="_on_ok_button_button_up"]
@@ -552,7 +584,8 @@ step = 1.0
 [connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer2/Columns" to="CenterContainer/TextureRect/TexSplit" method="_on_columns_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer/MarginX" to="CenterContainer/TextureRect/TexSplit" method="_on_margin_x_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer/MarginY" to="CenterContainer/TextureRect/TexSplit" method="_on_margin_y_value_changed"]
-[connection signal="button_up" from="CanvasLayer/UI/Right Toolbar/VBoxContainer/ScrollContainer/IndCharAdj/CenterContainer/AddICA Button" to="." method="_on_add_ica_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars/SPC Box/CenterContainer/AddAdj Button" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj" method="_on_add_adj_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs/KP Box/CenterContainer/AddPair Button" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj" method="_on_add_pair_button_button_up"]
 [connection signal="button_up" from="CanvasLayer/UI/Ribbon/HBoxContainer/OpenButton" to="." method="_on_open_button_button_up"]
 [connection signal="button_up" from="CanvasLayer/UI/Ribbon/HBoxContainer/ExportButton" to="Font Exporter" method="_on_export_button_button_up"]
 [connection signal="button_up" from="CanvasLayer/UI/Ribbon/HBoxContainer/PreferencesButton" to="PreferencesWindow" method="_on_preferences_button_button_up"]
