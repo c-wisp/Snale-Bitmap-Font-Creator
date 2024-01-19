@@ -13,6 +13,7 @@ config_version=5
 config/name="Snale Bitmap Font Creator"
 config/description="Allows the creation of Bitmap Fonts from images/textures"
 config/version="0.1"
+run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 run/max_fps=60
 run/low_processor_mode=true
@@ -26,15 +27,9 @@ window/size/resizable=false
 window/subwindows/embed_subwindows=false
 window/stretch/mode="viewport"
 
-[editor]
-
-version_control/plugin_name="GitPlugin"
-version_control/autoload_on_startup=true
-
 [file_customization]
 
 folder_colors={
-"res://Ref/": "orange",
 "res://Ref/Test Font/": "yellow",
 "res://Scenes/": "green",
 "res://Scenes/UI/": "blue",

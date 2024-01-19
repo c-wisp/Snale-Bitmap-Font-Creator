@@ -19,7 +19,6 @@ extends Node2D
 @export var char_offset := Vector2.ZERO #how many px the char is shifted by
 var current_tex_path := ""
 var char_cache := [] #used for sprites w/ non-grid textures (specifically on .fnt load)
-#var kerning_cache := []
 
 #region classes
 #NOTICE see https://www.angelcode.com/products/bmfont/doc/file_format.html for deets on what does what
@@ -170,9 +169,6 @@ func new_font(): #creates a font file using the data given
 					
 					current_font.chars.append(letter)
 	
-	#current_font.kernings_count = kerning_cache.size() if kerning_cache.size() > 0 else -1
-	#current_font.kerning = kerning_cache.duplicate()
-	
 	for k in Kerning_Pairs.get_children():
 		if k.get_index() <= 1 || k.pair.length() < 2 || k.offset == 0:
 			continue
@@ -202,7 +198,6 @@ func load_font(path : String): #loads .fnt files so they can be edited after exp
 	var chardata := []
 	var tex_is_grid := false
 	char_cache.clear()
-	#kerning_cache.clear()
 	while file.get_position() < file.get_length():
 		var data = file.get_line()
 		match data.left(data.find(" ")):
