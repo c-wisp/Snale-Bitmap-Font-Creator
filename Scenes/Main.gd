@@ -2,6 +2,7 @@ extends Node2D
 #holds global data & creates fonts
 
 @onready var Exporter = $"Font Exporter"
+@onready var Error_Dialog = $"ErrorDialog"
 @onready var Open_Dialog = $"OpenDialog"
 @onready var Loaded_Texture_Label = $"CanvasLayer/UI/LoadedTexLabel"
 @onready var Tex_Display = $"CenterContainer/TextureRect"
@@ -18,7 +19,9 @@ extends Node2D
 
 @export var char_offset := Vector2.ZERO #how many px the char is shifted by
 var current_tex_path := ""
+var current_file_path := ""
 var char_cache := [] #used for sprites w/ non-grid textures (specifically on .fnt load)
+signal ERR_LOAD_FAILED()
 
 #region classes
 #NOTICE see https://www.angelcode.com/products/bmfont/doc/file_format.html for deets on what does what
@@ -151,6 +154,11 @@ func new_font(): #creates a font file using the data given
 					
 					var letter = font_char.new()
 					letter.id = char_rows[c].unicode_at(int(r))
+					
+					var letter_pos = (char_size+margins)*Vector2(r,c)+margins/2
+					letter.x = letter_pos.x
+					letter.y = letter_pos.y
+					
 					letter.xoffset = char_offset.x
 					letter.yoffset = char_offset.y
 					if sp_char_adj.keys().has(char_rows[c][r]):
@@ -158,14 +166,17 @@ func new_font(): #creates a font file using the data given
 						letter.width = index.char_size.x if index.char_size.x != 0 else char_size.x
 						letter.height = index.char_size.y if index.char_size.y != 0 else char_size.y
 						letter.xadvance = index.advance if index.advance != 0 else char_size.x+2
+						
+						#make sure that the symbol is still centered after the size change
+						var pos_offset = char_size - index.char_size
+						if pos_offset.x != char_size.x:
+							letter.x += round(pos_offset.x/2)
+						if pos_offset.y != char_size.y:
+							letter.y += round(pos_offset.y/2)
 					else:
 						letter.width = char_size.x
 						letter.height = char_size.y
 						letter.xadvance = char_size.x+2
-					
-					var letter_pos = (char_size+margins)*Vector2(r,c)+margins/2
-					letter.x = letter_pos.x
-					letter.y = letter_pos.y
 					
 					current_font.chars.append(letter)
 	
@@ -203,17 +214,25 @@ func load_font(path : String): #loads .fnt files so they can be edited after exp
 		match data.left(data.find(" ")):
 			"info":
 				Font_Name.text = data.left(data.find(" size")).trim_prefix("info face=").replace('"',"")
+				Font_Name._on_text_changed(Font_Name.text) #refresh
 			"common":
 				var data_array = data.split(" ",false)
 				Font_Size.value = data_array[2].to_int()
 				Line_Spacing.value = data_array[1].to_int()/Font_Size.value
 			"page":
 				var tex_path = data.substr(data.find("file=")).trim_prefix('file="')
-				tex_path = Open_Dialog.current_dir+"/"+tex_path.substr(0,tex_path.rfind('"'))
+				var dir = (current_file_path.trim_suffix(current_file_path.substr(current_file_path.rfind("/"))))
+				tex_path = dir+"/"+tex_path.substr(0,tex_path.rfind('"'))
 				current_tex_path = tex_path.right(-tex_path.rfind("/")-1)
-				Tex_Display.texture = load(tex_path)
+				if !FileAccess.file_exists(tex_path):
+					reset()
+					Error_Dialog.dialog_text = "A texture has failed to load -- please ensure that all\nrequired textures are in the correct directory."
+					Error_Dialog.size = Vector2(410,120)
+					Error_Dialog.visible = true
+					break
+				Tex_Display.texture = ImageTexture.create_from_image(Image.load_from_file(tex_path))
 				Tex_Display.visible = true
-				Loaded_Texture_Label.text = "Loaded: "+Open_Dialog.current_file
+				Loaded_Texture_Label.text = "Loaded: "+current_tex_path
 				%"ExportButton".disabled = false
 				
 				#check if the page has a grid or not
@@ -267,12 +286,7 @@ func load_font(path : String): #loads .fnt files so they can be edited after exp
 	else:
 		char_cache.append_array(chardata)
 
-### Connections ###
-func _on_open_button_button_up():
-	Open_Dialog.visible = true
-
-func _on_open_dialog_confirmed():
-	#reset data
+func reset():
 	Font_Name.text = ""
 	Font_Size.value = 1
 	Line_Spacing.value = 1
@@ -282,16 +296,41 @@ func _on_open_dialog_confirmed():
 	Margin_Y.value = 0
 	Char_Arrangement.text = ""
 	current_tex_path = ""
+	current_file_path = ""
 	get_tree().call_group("SpCharData","_on_button_pressed") #delete existing SpCharData nodes
 	for g in get_tree().get_nodes_in_group("SheetData"): #regain control if locked
 		g.editable = true
+
+func fix_dir_path(path : String): #replaces "\" with "/" (windows is an ass abt this)
+	var new_path := ""
+	for c in path.length():
+		if path.unicode_at(c) == 92: #unicode for \
+			new_path += "/"
+		else:
+			new_path += path[c]
+	return new_path
+
+### Connections ###
+func _on_open_button_button_up():
+	Open_Dialog.visible = true
+
+func _on_open_dialog_file_selected(path):
+	reset()
+	path = fix_dir_path(path)
 	
 	#update it w/ new info
-	if Open_Dialog.current_file.ends_with(".fnt"):
-		load_font(Open_Dialog.current_path)
+	if !FileAccess.file_exists(path): #file couldn't be loaded, shouldnt happen but just in case it does - this is here
+		Error_Dialog.dialog_text = "The selected file has not been found and failed to load\n                                   please try again"
+		Error_Dialog.size = Vector2(435,120)
+		Error_Dialog.visible = true
 		return
-	current_tex_path = Open_Dialog.current_file
-	Tex_Display.texture = load(Open_Dialog.current_path)
+	current_file_path = path
+	if path.ends_with(".fnt"):
+		load_font(path)
+		return
+	
+	current_tex_path = path.substr(path.rfind("/")+1)
+	Tex_Display.texture = ImageTexture.create_from_image(Image.load_from_file(path))
 	Tex_Display.visible = true
 	Loaded_Texture_Label.text = "Loaded: "+current_tex_path
 	%"ExportButton".disabled = false #prevent exports w/o an image loaded

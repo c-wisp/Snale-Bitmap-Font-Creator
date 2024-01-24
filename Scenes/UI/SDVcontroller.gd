@@ -12,9 +12,19 @@ func _on_rows_value_changed(value):
 func _on_columns_value_changed(value):
 	material.set_shader_parameter("columns",value)
 
-func _on_open_dialog_confirmed():
+#func _on_open_dialog_confirmed():
+	#await get_tree().physics_frame
+	#if get_parent().texture != null:
+		#material.set_shader_parameter("sprite_size",get_parent().texture.get_size())
+	#else:
+		#material.set_shader_parameter("sprite_size",Vector2(128,128))
+
+func _on_open_dialog_file_selected(_path):
 	await get_tree().physics_frame
-	material.set_shader_parameter("sprite_size",get_parent().texture.get_size())
+	if get_parent().texture != null:
+		material.set_shader_parameter("sprite_size",get_parent().texture.get_size())
+	else:
+		material.set_shader_parameter("sprite_size",Vector2(128,128))
 
 func _on_margin_y_value_changed(value):
 	margin_cache.x = value

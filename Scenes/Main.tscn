@@ -32,6 +32,13 @@ wait_time = 2.0
 one_shot = true
 script = ExtResource("3_7f2cx")
 
+[node name="ErrorDialog" type="AcceptDialog" parent="."]
+title = "Error !"
+initial_position = 2
+size = Vector2i(778, 120)
+ok_button_text = "ok"
+dialog_text = "A texture has failed to load -- please ensure that all\\nrequired textures are in the correct directory."
+
 [node name="OpenDialog" type="FileDialog" parent="."]
 title = "Open a File"
 initial_position = 2
@@ -39,7 +46,8 @@ size = Vector2i(512, 512)
 ok_button_text = "Open"
 file_mode = 0
 access = 2
-filters = PackedStringArray("*.png, *.jpg", "*.fnt")
+filters = PackedStringArray("*.png, *.jpg, *.jpeg, *.tga, *.bmp, *.fnt ; All", "*.png, *.jpg, *.jpeg, *.tga, *.bmp ; Raster Images (.png, .jpg, .tga, .bmp)", "*.fnt")
+use_native_dialog = true
 
 [node name="ExportDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
@@ -48,6 +56,8 @@ initial_position = 2
 size = Vector2i(512, 512)
 ok_button_text = "Select Current Folder"
 file_mode = 2
+access = 2
+use_native_dialog = true
 
 [node name="PreferencesWindow" type="Window" parent="."]
 title = "Preferences"
@@ -571,10 +581,10 @@ step = 1.0
 
 [connection signal="autosaved_font" from="AutosaveTimer" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/Output Preview" method="_on_autosave_timer_autosaved_font"]
 [connection signal="timeout" from="AutosaveTimer" to="AutosaveTimer" method="_on_timeout"]
-[connection signal="confirmed" from="OpenDialog" to="." method="_on_open_dialog_confirmed"]
-[connection signal="confirmed" from="OpenDialog" to="CenterContainer/TextureRect/TexSplit" method="_on_open_dialog_confirmed"]
-[connection signal="confirmed" from="OpenDialog" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/Output Preview" method="_on_open_dialog_confirmed"]
-[connection signal="confirmed" from="ExportDialog" to="Font Exporter" method="_on_export_dialog_confirmed"]
+[connection signal="file_selected" from="OpenDialog" to="." method="_on_open_dialog_file_selected"]
+[connection signal="file_selected" from="OpenDialog" to="CenterContainer/TextureRect/TexSplit" method="_on_open_dialog_file_selected"]
+[connection signal="file_selected" from="OpenDialog" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/Output Preview" method="_on_open_dialog_file_selected"]
+[connection signal="dir_selected" from="ExportDialog" to="Font Exporter" method="_on_export_dialog_dir_selected"]
 [connection signal="close_requested" from="PreferencesWindow" to="PreferencesWindow" method="_on_close_requested"]
 [connection signal="button_up" from="PreferencesWindow/OKButton" to="PreferencesWindow" method="_on_ok_button_button_up"]
 [connection signal="close_requested" from="HelpWindow" to="HelpWindow" method="_on_close_requested"]
@@ -584,6 +594,7 @@ step = 1.0
 [connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer2/Columns" to="CenterContainer/TextureRect/TexSplit" method="_on_columns_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer/MarginX" to="CenterContainer/TextureRect/TexSplit" method="_on_margin_x_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer/MarginY" to="CenterContainer/TextureRect/TexSplit" method="_on_margin_y_value_changed"]
+[connection signal="text_changed" from="CanvasLayer/UI/Right Toolbar/VBoxContainer/Input Preview" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/Output Preview" method="_on_input_preview_text_changed"]
 [connection signal="button_up" from="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars/SPC Box/CenterContainer/AddAdj Button" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj" method="_on_add_adj_button_button_up"]
 [connection signal="button_up" from="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs/KP Box/CenterContainer/AddPair Button" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj" method="_on_add_pair_button_button_up"]
 [connection signal="button_up" from="CanvasLayer/UI/Ribbon/HBoxContainer/OpenButton" to="." method="_on_open_button_button_up"]

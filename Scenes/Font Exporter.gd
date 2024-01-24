@@ -99,19 +99,18 @@ func fake_delay(amount := 3):
 		await get_tree().physics_frame
 	emit_signal("fake_delay_ended")
 
-
 func _on_export_button_button_up():
 	Export_Dialog.visible = true
 
-func _on_export_dialog_confirmed():
+func _on_export_dialog_dir_selected(dir):
 	var current_font = owner.new_font()
 	var endpath = ""
-	endpath = Export_Dialog.current_path
-	var dir = DirAccess.open(endpath)
-	if dir == null:
+	endpath = owner.fix_dir_path(dir)
+	var dirAcc = DirAccess.open(endpath)
+	if dirAcc == null:
 		endpath = endpath.left(endpath.rfind("/"))
-		dir = DirAccess.open(endpath)
-		if dir == null:
+		dirAcc = DirAccess.open(endpath)
+		if dirAcc == null:
 			print_debug("Err: Directory not found")
 			return
 	
