@@ -38,10 +38,12 @@ To edit a singular character, press 'Add SP Char Data' to summon a small array o
 
 ### Kerning
 To add or edit kerning pairs, select the 'Kerning Pairs' tab in the bottom right corner of the application. From here one may add as many pairs as needed by pressing 'Add Kerning Pair'. When a pair is created, one will need to fill out the pair name and it's offset.
+
 Examples of these pairs (exclude brackets when actually inputting pairs):
+
 	[ty] (when a 't' precedes a 'y')
-	[(asterisk)i] (when anything precedes an 'i')
-	["(asterisk)"2] (when an asterisk precedes a '2')
+	[*i] (when anything precedes an 'i')
+	["*"2] (when an asterisk precedes a '2')
 
 ### Previewing the Font
 To see what the text would look like early, look in the top right for the 'Text Preview' and type in some sample text in it's input. **Note -- The output will only show up once a sufficient amount of data has been entered in for it to load (this includes the sprite, size, spacing, sheet data, and character arrangement)**
