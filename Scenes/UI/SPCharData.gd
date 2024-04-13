@@ -13,6 +13,12 @@ func connect_to_autosave():
 			return
 		connect("changed",Callable(Autosave_Timer,"change_detected"))
 
+func update_text(): #needs to be refreshed when a .fnt file is loaded
+	$Main/LineEdit.text = symbol
+	$Size/SizeX.value = char_size.x
+	$Size2/SizeY.value = char_size.y
+	$Advance/AdvanceX.value = advance
+
 func _on_line_edit_text_changed(new_text):
 	symbol = new_text
 	emit_signal("changed")

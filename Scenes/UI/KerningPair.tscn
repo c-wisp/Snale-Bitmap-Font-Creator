@@ -14,7 +14,7 @@ layout_mode = 2
 text = " Pair -- "
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer"]
-custom_minimum_size = Vector2(96, 0)
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 placeholder_text = "Empty"
 alignment = 1
@@ -39,6 +39,7 @@ layout_mode = 2
 min_value = -256.0
 max_value = 256.0
 alignment = 3
+update_on_text_changed = true
 prefix = " x"
 suffix = "px "
 

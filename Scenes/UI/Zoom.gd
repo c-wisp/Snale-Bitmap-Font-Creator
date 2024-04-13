@@ -4,7 +4,7 @@ extends Camera2D
 @onready var ZoomHitbox = owner.get_node("ZoomHitbox")
 @onready var Zoom_Label = owner.get_node("CanvasLayer/UI/ZoomLabel")
 var zoom_factor := 100.0
-var zoom_levels := [25,50,75,100,150,200,250,300,350,400,500,600,700,800]
+var zoom_levels := [25,50,75,100,200,300,400,500,600,700,800]
 
 var allow_zoom_change := false
 

@@ -1,0 +1,137 @@
+[gd_resource type="Theme" load_steps=16 format=3 uid="uid://bx6srd72e6gcb"]
+
+[ext_resource type="Texture2D" uid="uid://bhe3o02urm2q4" path="res://Sprites/UI Tex.png" id="1_7eqy2"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_knfgv"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 18.0
+texture_margin_top = 18.0
+texture_margin_right = 22.0
+texture_margin_bottom = 22.0
+region_rect = Rect2(0, 0, 64, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4srqs"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 10.0
+texture_margin_top = 12.0
+texture_margin_right = 11.0
+texture_margin_bottom = 12.0
+region_rect = Rect2(130, 34, 60, 28)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_txvds"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 10.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(130, 2, 60, 28)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r76en"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 10.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(130, 2, 60, 28)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lbrmy"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 10.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(130, 2, 60, 28)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8td4m"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(66, 34, 60, 28)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sdtbe"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 10.0
+texture_margin_top = 6.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(2, 66, 60, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_myudr"]
+atlas = ExtResource("1_7eqy2")
+region = Rect2(138, 64, 28, 34)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_i372d"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 22.0
+texture_margin_top = 22.0
+texture_margin_right = 18.0
+texture_margin_bottom = 18.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(0, 0, 64, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sg4r2"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 12.0
+texture_margin_top = 8.0
+texture_margin_right = 12.0
+texture_margin_bottom = 6.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(98, 82, 26, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gb6vm"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 12.0
+texture_margin_top = 8.0
+texture_margin_right = 12.0
+texture_margin_bottom = 6.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(98, 82, 26, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0om0v"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 12.0
+texture_margin_top = 8.0
+texture_margin_right = 12.0
+texture_margin_bottom = 6.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(98, 82, 26, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s288n"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 12.0
+texture_margin_top = 8.0
+texture_margin_right = 12.0
+texture_margin_bottom = 6.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(98, 64, 26, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1ej66"]
+texture = ExtResource("1_7eqy2")
+texture_margin_left = 10.0
+texture_margin_top = 6.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(2, 66, 60, 26)
+
+[resource]
+AcceptDialog/styles/panel = SubResource("StyleBoxTexture_knfgv")
+Button/styles/disabled = SubResource("StyleBoxTexture_4srqs")
+Button/styles/focus = SubResource("StyleBoxTexture_txvds")
+Button/styles/hover = SubResource("StyleBoxTexture_r76en")
+Button/styles/normal = SubResource("StyleBoxTexture_lbrmy")
+Button/styles/pressed = SubResource("StyleBoxTexture_8td4m")
+LineEdit/styles/normal = SubResource("StyleBoxTexture_sdtbe")
+SpinBox/icons/updown = SubResource("AtlasTexture_myudr")
+TabContainer/styles/panel = SubResource("StyleBoxTexture_i372d")
+TabContainer/styles/tab_focus = SubResource("StyleBoxTexture_sg4r2")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxTexture_gb6vm")
+TabContainer/styles/tab_selected = SubResource("StyleBoxTexture_0om0v")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxTexture_s288n")
+TextEdit/styles/normal = SubResource("StyleBoxTexture_1ej66")

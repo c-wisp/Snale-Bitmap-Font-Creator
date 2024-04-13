@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cy80qqtuujold"]
+[gd_scene load_steps=16 format=3 uid="uid://cy80qqtuujold"]
 
 [ext_resource type="Script" path="res://Scenes/Main.gd" id="1_1unx3"]
 [ext_resource type="Script" path="res://Scenes/Font Exporter.gd" id="2_os87d"]
@@ -6,19 +6,15 @@
 [ext_resource type="Script" path="res://Scenes/UI/Zoom.gd" id="3_35jiy"]
 [ext_resource type="Script" path="res://Scenes/Preferences.gd" id="3_feyia"]
 [ext_resource type="Script" path="res://Scenes/UI/HelpWindow.gd" id="4_ovv60"]
-[ext_resource type="Shader" path="res://Scenes/UI/SheetDataVisual.gdshader" id="5_lrs0x"]
-[ext_resource type="Texture2D" uid="uid://dj7ugcaxhswdh" path="res://icon.svg" id="5_ow5ji"]
-[ext_resource type="Script" path="res://Scenes/UI/SDVcontroller.gd" id="6_rtvr5"]
+[ext_resource type="Texture2D" uid="uid://rebqmn4yophj" path="res://icon.svg" id="5_ow5ji"]
 [ext_resource type="Script" path="res://Scenes/UI/FontNameChecker.gd" id="9_2cha7"]
+[ext_resource type="Script" path="res://Scenes/SplitVisual.gd" id="9_4k0ue"]
+[ext_resource type="Texture2D" uid="uid://bhe3o02urm2q4" path="res://Sprites/UI Tex.png" id="10_sh88t"]
 [ext_resource type="Script" path="res://Scenes/UI/OutputPreview.gd" id="11_m7bvf"]
 [ext_resource type="Script" path="res://Scenes/UI/IndividualCharAdj.gd" id="12_qu3sp"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ntki1"]
-shader = ExtResource("5_lrs0x")
-shader_parameter/rows = 1
-shader_parameter/columns = 1
-shader_parameter/margins = Vector2(0, 0)
-shader_parameter/sprite_size = Vector2(64, 64)
+[ext_resource type="Theme" uid="uid://bx6srd72e6gcb" path="res://Sprites/UI Theme.tres" id="13_ds4cj"]
+[ext_resource type="FontFile" uid="uid://d0s1asjgghw5a" path="res://test/Eggegg.fnt" id="13_ihgo6"]
+[ext_resource type="FontFile" uid="uid://dqm5xeb81sgmf" path="res://test/Eggegg but Outlined.fnt" id="14_xi1ne"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_1unx3")
@@ -35,8 +31,8 @@ script = ExtResource("3_7f2cx")
 [node name="ErrorDialog" type="AcceptDialog" parent="."]
 title = "Error !"
 initial_position = 2
-size = Vector2i(778, 120)
-ok_button_text = "ok"
+size = Vector2i(803, 120)
+ok_button_text = " ok "
 dialog_text = "A texture has failed to load -- please ensure that all\\nrequired textures are in the correct directory."
 
 [node name="OpenDialog" type="FileDialog" parent="."]
@@ -139,15 +135,11 @@ offset_bottom = 720.0
 layout_mode = 2
 texture = ExtResource("5_ow5ji")
 
-[node name="TexSplit" type="ColorRect" parent="CenterContainer/TextureRect"]
-material = SubResource("ShaderMaterial_ntki1")
+[node name="SplitVisual" type="Control" parent="CenterContainer/TextureRect"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("6_rtvr5")
+anchors_preset = 0
+script = ExtResource("9_4k0ue")
+use_alt_pallete = true
 
 [node name="Zoom" type="Camera2D" parent="CenterContainer"]
 script = ExtResource("3_35jiy")
@@ -165,7 +157,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.223529, 0.243137, 0.34902, 1)
+color = Color(0.207843, 0.219608, 0.305882, 1)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 2
@@ -184,9 +176,26 @@ layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_top = 23.0
-offset_right = 256.0
+offset_right = 288.0
 grow_vertical = 2
-color = Color(0.490196, 0.670588, 0.662745, 1)
+color = Color(0.490196, 0.670588, 0.662745, 0)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer/UI/Left Toolbar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_sh88t")
+region_rect = Rect2(64, 65, 34, 33)
+patch_margin_left = 18
+patch_margin_top = 17
+patch_margin_right = 18
+patch_margin_bottom = 18
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/Left Toolbar"]
 layout_mode = 1
@@ -194,7 +203,7 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 8.0
-offset_top = 25.0
+offset_top = 34.0
 offset_right = -8.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -212,6 +221,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(112, 34)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 placeholder_text = "Untitled Font"
 alignment = 1
 context_menu_enabled = false
@@ -231,10 +241,12 @@ alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 min_value = 1.0
 max_value = 128.0
 value = 1.0
 alignment = 1
+update_on_text_changed = true
 suffix = "px"
 select_all_on_focus = true
 
@@ -254,11 +266,13 @@ text = "Font Size"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 min_value = 1.0
 max_value = 3.0
 step = 0.05
 value = 1.0
 alignment = 1
+update_on_text_changed = true
 select_all_on_focus = true
 
 [node name="Label" type="Label" parent="CanvasLayer/UI/Left Toolbar/VBoxContainer/Info/HBoxContainer/Line Spacing"]
@@ -296,10 +310,12 @@ alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(112, 0)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 min_value = 1.0
 max_value = 64.0
 value = 1.0
 alignment = 3
+update_on_text_changed = true
 prefix = "row"
 suffix = " "
 select_all_on_focus = true
@@ -308,10 +324,12 @@ select_all_on_focus = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(112, 0)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 min_value = 1.0
 max_value = 64.0
 value = 1.0
 alignment = 3
+update_on_text_changed = true
 prefix = "col"
 suffix = " "
 select_all_on_focus = true
@@ -329,8 +347,10 @@ alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(112, 0)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 max_value = 64.0
 alignment = 3
+update_on_text_changed = true
 prefix = "x"
 suffix = "px"
 select_all_on_focus = true
@@ -339,8 +359,10 @@ select_all_on_focus = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(112, 0)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 max_value = 64.0
 alignment = 3
+update_on_text_changed = true
 prefix = "y"
 suffix = "px"
 select_all_on_focus = true
@@ -355,6 +377,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 192)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 placeholder_text = "Input Character Data"
 
 [node name="Version Label" type="Label" parent="CanvasLayer/UI/Left Toolbar"]
@@ -379,12 +402,27 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -256.0
+offset_left = -288.0
 offset_top = -328.0
 offset_bottom = 360.0
 grow_horizontal = 0
 grow_vertical = 2
-color = Color(0.490196, 0.670588, 0.662745, 1)
+color = Color(0.490196, 0.670588, 0.662745, 0)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer/UI/Right Toolbar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_sh88t")
+region_rect = Rect2(64, 64, 34, 34)
+patch_margin_left = 18
+patch_margin_top = 17
+patch_margin_right = 18
+patch_margin_bottom = 19
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/Right Toolbar"]
 layout_mode = 1
@@ -392,9 +430,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 8.0
-offset_top = 16.0
+offset_top = 21.0
 offset_right = -8.0
-offset_bottom = -8.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -406,11 +444,13 @@ horizontal_alignment = 1
 [node name="Input Preview" type="TextEdit" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer"]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 placeholder_text = "Input Preview Text"
 
 [node name="Output Preview" type="TextEdit" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer"]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 placeholder_text = "Output Text"
 editable = false
 script = ExtResource("11_m7bvf")
@@ -427,14 +467,19 @@ horizontal_alignment = 1
 [node name="IndividualCharAdj" type="TabContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer"]
 custom_minimum_size = Vector2(0, 382)
 layout_mode = 2
+theme = ExtResource("13_ds4cj")
 tab_alignment = 1
+clip_tabs = false
 script = ExtResource("12_qu3sp")
 
 [node name="SP Chars" type="ScrollContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj"]
 layout_mode = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 2
 
 [node name="SPC Box" type="VBoxContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(232, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 
@@ -442,19 +487,23 @@ theme_override_constants/separation = 12
 layout_mode = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars/SPC Box"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
 [node name="AddAdj Button" type="Button" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars/SPC Box/CenterContainer"]
 layout_mode = 2
-text = "   Add SP Char Data   "
+text = " Add SP Char Data "
 
 [node name="Kerning Pairs" type="ScrollContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj"]
 visible = false
 layout_mode = 2
+scroll_horizontal = 8
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 2
 
 [node name="KP Box" type="VBoxContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(232, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 
@@ -462,7 +511,7 @@ theme_override_constants/separation = 12
 layout_mode = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs/KP Box"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
 [node name="AddPair Button" type="Button" parent="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs/KP Box/CenterContainer"]
@@ -474,37 +523,62 @@ custom_minimum_size = Vector2(0, 32)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
+offset_bottom = 46.0
 grow_horizontal = 2
-color = Color(0.560784, 0.768627, 0.741176, 1)
+color = Color(1, 1, 1, 0)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UI/Ribbon"]
+[node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer/UI/Ribbon"]
+show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = -3.0
-offset_right = -16.0
-offset_bottom = 4.0
+offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("10_sh88t")
+region_rect = Rect2(66, 2, 60, 28)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UI/Ribbon"]
+layout_mode = 1
+offset_left = 6.0
+offset_top = 4.0
+offset_right = 342.0
+offset_bottom = 35.0
 
 [node name="OpenButton" type="Button" parent="CanvasLayer/UI/Ribbon/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
+theme = ExtResource("13_ds4cj")
 text = "Open File"
 
 [node name="ExportButton" type="Button" parent="CanvasLayer/UI/Ribbon/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
+theme = ExtResource("13_ds4cj")
 disabled = true
 text = "Export Font"
 
 [node name="PreferencesButton" type="Button" parent="CanvasLayer/UI/Ribbon/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
+theme = ExtResource("13_ds4cj")
 text = "Preferences"
+
+[node name="EditButton" type="Button" parent="CanvasLayer/UI/Ribbon/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("13_ds4cj")
+text = "Edit"
 
 [node name="HelpButton" type="Button" parent="CanvasLayer/UI/Ribbon/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
+theme = ExtResource("13_ds4cj")
 text = "Help"
 
 [node name="ZoomLabel" type="Label" parent="CanvasLayer/UI"]
@@ -529,9 +603,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -552.0
+offset_left = -576.0
 offset_top = -32.0
-offset_right = -264.0
+offset_right = -296.0
 offset_bottom = -9.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -579,10 +653,39 @@ grow_horizontal = 2
 grow_vertical = 0
 step = 1.0
 
+[node name="Label" type="Label" parent="."]
+offset_left = 439.0
+offset_top = -59.0
+offset_right = 567.0
+offset_bottom = -36.0
+theme_override_fonts/font = ExtResource("13_ihgo6")
+text = "wahhoooo"
+
+[node name="Label" type="Label" parent="Label"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 30.0
+offset_right = 103.0
+offset_bottom = 53.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("14_xi1ne")
+text = "yyiiipppee"
+
+[node name="Label2" type="Label" parent="Label"]
+layout_mode = 0
+offset_left = 143.0
+offset_top = -2.0
+offset_right = 335.0
+offset_bottom = 21.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("14_xi1ne")
+text = "womp womp"
+
 [connection signal="autosaved_font" from="AutosaveTimer" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/Output Preview" method="_on_autosave_timer_autosaved_font"]
 [connection signal="timeout" from="AutosaveTimer" to="AutosaveTimer" method="_on_timeout"]
 [connection signal="file_selected" from="OpenDialog" to="." method="_on_open_dialog_file_selected"]
-[connection signal="file_selected" from="OpenDialog" to="CenterContainer/TextureRect/TexSplit" method="_on_open_dialog_file_selected"]
+[connection signal="file_selected" from="OpenDialog" to="CenterContainer/TextureRect/SplitVisual" method="_on_open_dialog_file_selected"]
 [connection signal="file_selected" from="OpenDialog" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/Output Preview" method="_on_open_dialog_file_selected"]
 [connection signal="dir_selected" from="ExportDialog" to="Font Exporter" method="_on_export_dialog_dir_selected"]
 [connection signal="close_requested" from="PreferencesWindow" to="PreferencesWindow" method="_on_close_requested"]
@@ -590,10 +693,10 @@ step = 1.0
 [connection signal="close_requested" from="HelpWindow" to="HelpWindow" method="_on_close_requested"]
 [connection signal="button_up" from="HelpWindow/Button" to="HelpWindow" method="_on_button_button_up"]
 [connection signal="text_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Info/FontName" to="CanvasLayer/UI/Left Toolbar/VBoxContainer/Info/FontName" method="_on_text_changed"]
-[connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer2/Rows" to="CenterContainer/TextureRect/TexSplit" method="_on_rows_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer2/Columns" to="CenterContainer/TextureRect/TexSplit" method="_on_columns_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer/MarginX" to="CenterContainer/TextureRect/TexSplit" method="_on_margin_x_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer/MarginY" to="CenterContainer/TextureRect/TexSplit" method="_on_margin_y_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer2/Rows" to="CenterContainer/TextureRect/SplitVisual" method="_on_rows_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer2/Columns" to="CenterContainer/TextureRect/SplitVisual" method="_on_columns_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer/MarginX" to="CenterContainer/TextureRect/SplitVisual" method="_on_margin_x_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/UI/Left Toolbar/VBoxContainer/Character/HBoxContainer/MarginY" to="CenterContainer/TextureRect/SplitVisual" method="_on_margin_y_value_changed"]
 [connection signal="text_changed" from="CanvasLayer/UI/Right Toolbar/VBoxContainer/Input Preview" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/Output Preview" method="_on_input_preview_text_changed"]
 [connection signal="button_up" from="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/SP Chars/SPC Box/CenterContainer/AddAdj Button" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj" method="_on_add_adj_button_button_up"]
 [connection signal="button_up" from="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj/Kerning Pairs/KP Box/CenterContainer/AddPair Button" to="CanvasLayer/UI/Right Toolbar/VBoxContainer/IndividualCharAdj" method="_on_add_pair_button_button_up"]

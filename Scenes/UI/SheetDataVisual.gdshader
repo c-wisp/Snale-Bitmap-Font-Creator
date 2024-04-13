@@ -46,8 +46,8 @@ void fragment() {
 	
 	
 	//Final Application
-	float apply_margins = min(step(0.99,margins.x)+step(0.99,margins.y),1.0);
-	COLOR.rgb = mix(MARGIN_COLOR,BORDER_COLOR,(min(vec3(marginBorderTg),1.0)));
-	COLOR.rgb = mix(BORDER_COLOR,COLOR.rgb,apply_margins);
-	COLOR.a = mix(0.6*min(rowTg+columnTg,1.0),0.6*min(marginTg+marginBorderTg,1.0),apply_margins);
+	//float apply_margins = min(step(0.99,margins.x)+step(0.99,margins.y),1.0);
+	//COLOR.rgb = mix(MARGIN_COLOR,BORDER_COLOR,(min(vec3(marginBorderTg),1.0)));
+	//COLOR.rgb = mix(BORDER_COLOR,COLOR.rgb,apply_margins);
+	//COLOR.a = mix(0.6*min(rowTg+columnTg,1.0),0.6*min(marginTg+marginBorderTg,1.0),apply_margins);
 }

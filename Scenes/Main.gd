@@ -124,10 +124,11 @@ func new_font(): #creates a font file using the data given
 				if sp_char_adj.size() == 0:
 					break
 				if sp_char_adj.has(String.chr(c.id)):
+					print_debug("err here")
 					var index = sp_char_adj[String.chr(c.id)]
 					current_font.chars[c].width = index.char_size.x if index.char_size.x != 0 else current_font.chars[c].width
 					current_font.chars[c].height = index.char_size.y if index.char_size.y != 0 else current_font.chars[c].height
-					current_font.chars[c].xadvance = index.advance if index.advance != 0 else current_font.chars[c].width+2
+					current_font.chars[c].xadvance = index.advance if index.advance != 0 else current_font.chars[c].width
 					sp_char_adj.erase(String.chr(c.id))
 	else:
 		var char_rows := []
@@ -165,7 +166,7 @@ func new_font(): #creates a font file using the data given
 						var index = sp_char_adj[char_rows[c][r]]
 						letter.width = index.char_size.x if index.char_size.x != 0 else char_size.x
 						letter.height = index.char_size.y if index.char_size.y != 0 else char_size.y
-						letter.xadvance = index.advance if index.advance != 0 else char_size.x+2
+						letter.xadvance = index.advance if index.advance != 0 else char_size.x
 						
 						#make sure that the symbol is still centered after the size change
 						var pos_offset = char_size - index.char_size
@@ -176,7 +177,7 @@ func new_font(): #creates a font file using the data given
 					else:
 						letter.width = char_size.x
 						letter.height = char_size.y
-						letter.xadvance = char_size.x+2
+						letter.xadvance = char_size.x
 					
 					current_font.chars.append(letter)
 	
@@ -266,6 +267,17 @@ func load_font(path : String): #loads .fnt files so they can be edited after exp
 				
 				if tex_is_grid:
 					Char_Arrangement.text[chardata.size()] = String.chr(new_char.id)
+					
+					var grid_size = Tex_Display.texture.get_size() / Vector2(Rows.value,Columns.value) - Vector2(Margin_X.value,Margin_Y.value)
+					if new_char.xadvance != grid_size.x || new_char.width != grid_size.x || new_char.height != grid_size.y:
+						var new_sp = Individual_Char_Adj.SPCharData_Base.instantiate()
+						Special_Chars.add_child(new_sp)
+						new_sp.symbol = String.chr(new_char.id)
+						new_sp.advance = new_char.xadvance if new_char.xadvance != grid_size.x else 0
+						new_sp.char_size.x = new_char.width if new_char.width != grid_size.x else 0
+						new_sp.char_size.y = new_char.height if new_char.height != grid_size.y else 0
+						new_sp.update_text()
+						new_sp.connect_to_autosave()
 				chardata.append(new_char)
 			"kerning":
 				var data_array = data.split(" ",false)
@@ -274,17 +286,24 @@ func load_font(path : String): #loads .fnt files so they can be edited after exp
 				new_pair.pair = String.chr(data_array[1].to_int())+String.chr(data_array[2].to_int())
 				new_pair.offset = data_array[3].to_int()
 				new_pair.update_text()
+				new_pair.connect_to_autosave()
 	
 	#fix the char_arrangement to fit the row/column ct
 	#shouldnt really do anything (aside from visuals) if the texture isnt a grid
+	var SplitVis = $CenterContainer/TextureRect/SplitVisual
 	if tex_is_grid:
 		for c in Columns.value:
 			Char_Arrangement.text = Char_Arrangement.text.insert(Rows.value*(c+1)+c,"\n")
 		var textcache = Char_Arrangement.text.trim_suffix("\n")
 		Char_Arrangement.clear()
 		Char_Arrangement.text = textcache
+		SplitVis.grid_enabled = true
 	else:
 		char_cache.append_array(chardata)
+		SplitVis.grid_enabled = false
+		SplitVis.divide_unlimited()
+	
+	$AutosaveTimer._on_timeout() #call the autosave timer to quicksave + refresh the text
 
 func reset():
 	Font_Name.text = ""

@@ -29,6 +29,11 @@ func export(fnt, filename := "", where := DEFAULT_PATH, show_panel := true): #'f
 	length = 4.0+fnt.chars_count+fnt.kernings_count
 	progress = 0.0
 	
+	var dir = DirAccess.open(where+"/") #remove duplicate files
+	if dir.file_exists(filename):
+		dir.remove(filename)
+		await get_tree().physics_frame
+	
 	var file = FileAccess.open(where+"/"+filename, FileAccess.WRITE)
 	
 	#font_info

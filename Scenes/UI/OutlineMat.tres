@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cl0bey3l6qv6r"]
+
+[ext_resource type="Shader" path="res://Scenes/UI/Outline.gdshader" id="1_dwu0t"]
+
+[resource]
+shader = ExtResource("1_dwu0t")
+shader_parameter/total_size = Vector2(16, 16)

@@ -7,7 +7,6 @@ It may also work in 3.X, but that isn't the main focus for this project
 
 ## Upcoming / Roadmap
 
-- Actual UI (not just placeholders)
 - A preferences/help window
 - Multipage support
 - Minor QOL changes
@@ -19,6 +18,21 @@ From here one may specify the face, size, spacing, and arragement of the letters
 
 **NOTICE:** When inputting the rows and column ct. and the margins -- the boxes highlighted in blue (including the pixels underneath) are what will be used, anything highlighted in magenta/fuschia will be ignored on export.
 
+### Adding Outlines and/or Drop Shadows
+To do this it is recomended to recolor the sprite so that the background is black, the characters themself (not the outline) is either 255 r,g, or b -- reserving this color for it specifically.
+And coloring the outline with one of the two remaining colors.
+
+Then one would run this application, filling in the usual data. But before exporting, go into the "edit" window and set the following values:
+
+```
+alphaChannel : 3 (unused)
+redChannel : 0 (if it is the character color), 1 (if it is the outline/drop shadow color), or 3 (unused)
+blueChannel : 0 (if it is the character color), 1 (if it is the outline/drop shadow color), or 3 (unused)
+greenChannel : 0 (if it is the character color), 1 (if it is the outline/drop shadow color), or 3 (unused)
+```
+
+After that, the file should be ready to export.
+
 ### Editing Specific Characters
 To edit a singular character, press 'Add SP Char Data' to summon a small array of variables that let you change the size and horizontal offset of the character specified. Pressing 'Delete' on one of these will remove it.
 
@@ -26,8 +40,8 @@ To edit a singular character, press 'Add SP Char Data' to summon a small array o
 To add or edit kerning pairs, select the 'Kerning Pairs' tab in the bottom right corner of the application. From here one may add as many pairs as needed by pressing 'Add Kerning Pair'. When a pair is created, one will need to fill out the pair name and it's offset.
 Examples of these pairs (exclude brackets when actually inputting pairs):
 	[ty] (when a 't' precedes a 'y')
-	[*i] (when anything precedes an 'i')
-	["*"2] (when an asterisk precedes a '2')
+	[(asterisk)i] (when anything precedes an 'i')
+	["(asterisk)"2] (when an asterisk precedes a '2')
 
 ### Previewing the Font
 To see what the text would look like early, look in the top right for the 'Text Preview' and type in some sample text in it's input. **Note -- The output will only show up once a sufficient amount of data has been entered in for it to load (this includes the sprite, size, spacing, sheet data, and character arrangement)**

@@ -11,7 +11,7 @@ theme_override_constants/separation = 16
 alignment = 1
 
 [node name="LineEdit" type="LineEdit" parent="Main"]
-custom_minimum_size = Vector2(96, 32)
+custom_minimum_size = Vector2(80, 32)
 layout_mode = 2
 placeholder_text = "Char"
 alignment = 1
@@ -23,6 +23,7 @@ text = "   Delete   "
 
 [node name="Size" type="HBoxContainer" parent="."]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="Size"]
 layout_mode = 2
@@ -31,31 +32,48 @@ text = "Size -- "
 [node name="SizeX" type="SpinBox" parent="Size"]
 layout_mode = 2
 alignment = 3
+update_on_text_changed = true
 prefix = "x"
 suffix = " "
 
-[node name="SizeY" type="SpinBox" parent="Size"]
+[node name="Size2" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="Empty Space" type="Control" parent="Size2"]
+custom_minimum_size = Vector2(49, 0)
+layout_mode = 2
+
+[node name="SizeY" type="SpinBox" parent="Size2"]
 layout_mode = 2
 max_value = 64.0
 alignment = 3
+update_on_text_changed = true
 prefix = "y"
 suffix = " "
 
 [node name="Advance" type="HBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="Advance"]
 layout_mode = 2
-text = "Advance -- "
+text = "Adv -- "
+
+[node name="Empty Space" type="Control" parent="Advance"]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
 
 [node name="AdvanceX" type="SpinBox" parent="Advance"]
 layout_mode = 2
 alignment = 3
+update_on_text_changed = true
 prefix = "x"
 suffix = " "
 
 [connection signal="text_changed" from="Main/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="pressed" from="Main/Button" to="." method="_on_button_pressed"]
 [connection signal="value_changed" from="Size/SizeX" to="." method="_on_size_x_value_changed"]
-[connection signal="value_changed" from="Size/SizeY" to="." method="_on_size_y_value_changed"]
+[connection signal="value_changed" from="Size2/SizeY" to="." method="_on_size_y_value_changed"]
 [connection signal="value_changed" from="Advance/AdvanceX" to="." method="_on_advance_x_value_changed"]

@@ -17,7 +17,8 @@ run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 run/max_fps=60
 run/low_processor_mode=true
-config/icon="res://icon.svg"
+config/icon="res://Sprites/Icon-desat.png"
+config/windows_native_icon="res://Snale BMF Icon.ico"
 
 [display]
 
